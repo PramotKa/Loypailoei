@@ -47,8 +47,8 @@ export default function App() {
     let alive = true;
     const keep = (d) => d.filter(k => !deleted.current.has(k.id));
     const load = () => {
-      listKrathongs().then(d => alive && setItems(keep(d))).catch(() => { });
-      listLanterns().then(d => alive && setLanterns(keep(d))).catch(() => { });
+      listKrathongs().then(d => alive && setItems(keep(d))).catch(() => {});
+      listLanterns().then(d => alive && setLanterns(keep(d))).catch(() => {});
     };
     load();
     const t = setInterval(load, 15000);
@@ -83,20 +83,18 @@ export default function App() {
     if (mineId === k.id) setMineId(null);
     setMine(mineCount());
     setSelected(null);
-    setToast('ลบกระทงแล้ว');
     say(k.kind === 'lantern' ? 'ลบโคมแล้ว' : 'ลบกระทงแล้ว', 3000);
   }
-}
 
-const closeMine = useCallback(() => { setMineOpen(false); setMine(mineCount()); }, []);
+  const closeMine = useCallback(() => { setMineOpen(false); setMine(mineCount()); }, []);
 
-function exitAdmin() {
-  setAdminKey('');
-  setAdmin(false);
-}
+  function exitAdmin() {
+    setAdminKey('');
+    setAdmin(false);
+  }
 
-return (
-  <StyleContext.Provider value={styleState}>
+  return (
+    <StyleContext.Provider value={styleState}>
     <div className="app">
       <div className="scene">
         <div className="scene__bg" aria-hidden="true" />
@@ -106,28 +104,29 @@ return (
 
       <main className="hero">
         <h1>ลอยไปเลย<span>ลอยกระทงออนไลน์ คืนวันเพ็ญ</span></h1>
-        <p>แต่งกระทงในแบบของคุณ หรือปล่อยโคมลอยขึ้นฟ้า พร้อมคำอธิษฐาน ไปกับทุกคนในค่ำคืนนี้</p>
+        <p>แต่งกระทงในแบบของคุณ หรือปล่อยโคมลอยขึ้นฟ้า พร้อมคำอธิษฐาน ไปกับทุกคนในคืนเดียวกัน</p>
         <div className="hero__actions">
+          <button type="button" className="btn btn--primary" onClick={() => setBuilderOpen(true)}>ประดิษฐ์กระทงของฉัน</button>
           <button type="button" className="btn btn--ghost btn--lantern" onClick={() => setMakerOpen(true)}>ปล่อยโคมลอย</button>
-          +          <span className="hero__hint">แตะกระทงหรือโคมเพื่ออ่านคำอธิษฐาน</span>
+          <span className="hero__hint">แตะกระทงหรือโคมเพื่ออ่านคำอธิษฐาน</span>
         </div>
       </main>
 
       <footer className="dock">
         <span className="dock__count"><strong>{items.length}</strong> กระทง · <strong>{lanterns.length}</strong> โคม</span>
         <span className="dock__actions">
-          {mine > 0 && (
-            <button type="button" className="btn btn--ghost btn--small" onClick={() => setMineOpen(true)}>ของฉัน ({mine})</button>
-          )}
-          {admin && (
-            <button type="button" className="btn btn--ghost btn--small btn--admin" onClick={exitAdmin}>ออกจากโหมดผู้ดูแล</button>
-          )}
-          <button type="button" className="btn btn--ghost btn--small" aria-pressed={styleState.pixel} onClick={styleState.toggle}>
-            {styleState.pixel ? 'โหมดสมจริง' : 'โหมด 8-bit'}
-          </button>
-          <button type="button" className="btn btn--ghost btn--small" aria-pressed={paused} onClick={() => setPaused(p => !p)}>
-            {paused ? 'ให้สายน้ำไหลต่อ' : 'หยุดสายน้ำ'}
-          </button>
+        {mine > 0 && (
+          <button type="button" className="btn btn--ghost btn--small" onClick={() => setMineOpen(true)}>ของฉัน ({mine})</button>
+        )}
+        {admin && (
+          <button type="button" className="btn btn--ghost btn--small btn--admin" onClick={exitAdmin}>ออกจากโหมดผู้ดูแล</button>
+        )}
+        <button type="button" className="btn btn--ghost btn--small" aria-pressed={styleState.pixel} onClick={styleState.toggle}>
+          {styleState.pixel ? 'โหมดสมจริง' : 'โหมด 8-bit'}
+        </button>
+        <button type="button" className="btn btn--ghost btn--small" aria-pressed={paused} onClick={() => setPaused(p => !p)}>
+          {paused ? 'ให้สายน้ำไหลต่อ' : 'หยุดสายน้ำ'}
+        </button>
         </span>
       </footer>
 
@@ -138,6 +137,6 @@ return (
       <MyKrathongs open={mineOpen} onClose={closeMine} onDelete={handleDelete} />
       <div className={`toast${toast ? ' is-on' : ''}`} role="status" aria-live="polite">{toast}</div>
     </div>
-  </StyleContext.Provider>
-);
-
+    </StyleContext.Provider>
+  );
+}
